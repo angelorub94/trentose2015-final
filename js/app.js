@@ -92,14 +92,13 @@ var view = {
         //$(".card").html(""); 
         var tmpl = controller.getRequest();
         $(".question").text(tmpl.question);
-        $(".question-items").append('<li class=selected>' + tmpl.options[0] + '</li>');
-        $(".question-items").append('<li class=selected>' + tmpl.options[1] + '</li>');
+        $(".question-items").append('<li>' + tmpl.options[0] + '</li>');
+        $(".question-items").append('<li>' + tmpl.options[1] + '</li>');
     },
     
     clickAnsw: function(){
         $(".question-items").click(function(elem){
-            var risp = elem.currentTarget.text();
-            alert(risp);
+            var risp =  elem.data;
             if(controller.getPackRes() == 1){
                 controller.addPoint();
             }
