@@ -9,16 +9,29 @@ var SantaModel = {
    * and sets the first one as the current one 
    */
    init : function(list){
+     this.list = requests;
+     this.current = 0;
+     this.points = 0;
    },
   
    /* It moves "current" to the next request */
    next : function (){
+       this.current++;
    },
+    
+    addPoints : function(){
+      this.points ++;
+    },
   
    /* Returns the current request. 
     * If all requests have been processed (there is no current one), it returns null 
     */
    getCurrentRequest : function () {
+       if(this.list[this.current] == undefined){
+           return null;
+       } else {
+           return this.list[this.current];
+       }
    },  
     
    /* Packs the given item if it fulfills the current request.       
@@ -26,6 +39,80 @@ var SantaModel = {
     * returns 0 if the given item does not fulfill the request
     */
    pack : function(item) {
-   }      
+       if(item === this.list[this.current].answer){
+           return 1;
+       } else {
+           return 0;
+       }
+   },
+    
+    getTotPoints: function(){
+        return this.points;
+    }
   
 };
+
+var controller = {
+    init: function(){
+        SantaModel.init();
+        //if(SantaModel.current<SantaModel.list.length){
+        view.render();
+        view.clickAnsw();
+        //}else{
+          //  view.renderTotal();
+    //    }
+    },
+    
+    getRequest: function(){
+        return SantaModel.getCurrentRequest();
+    },
+    
+    getPackRes: function(){
+        return SantaModel.pack();
+    },
+    
+    addPoint: function(){
+        SantaModel.addPoints();
+    },
+    
+    callNext: function(){
+        SantaModel.next();
+    },
+    
+    getPoints: function(){
+        return SantaModel.getTotPoints();
+    }
+    
+
+};
+
+var view = {  
+    render: function(){
+        //$(".card").html(""); 
+        var tmpl = controller.getRequest();
+        $(".question").text(tmpl.question);
+        $(".question-items").append('<li class=selected>' + tmpl.options[0] + '</li>');
+        $(".question-items").append('<li class=selected>' + tmpl.options[1] + '</li>');
+    },
+    
+    clickAnsw: function(){
+        $(".question-items").click(function(elem){
+            var risp = elem.currentTarget.text();
+            alert(risp);
+            if(controller.getPackRes() == 1){
+                controller.addPoint();
+            }
+            controller.callNext();
+        });
+    },
+    
+    renderTotal: function(){
+       // $(".card").html("");
+        var temp = controller.getPoints();
+        $(".results").html("Total points: " + temp);
+    }
+};
+
+$(document).ready(function(){
+    controller.init();
+});
