@@ -9,7 +9,7 @@ var SantaModel = {
    * and sets the first one as the current one 
    */
    init : function(list){
-     this.list = requests;
+     this.lista = list;
      this.current = 0;
      this.points = 0;
    },
@@ -27,10 +27,10 @@ var SantaModel = {
     * If all requests have been processed (there is no current one), it returns null 
     */
    getCurrentRequest : function () {
-       if(this.list[this.current] == undefined){
+       if(this.lista[this.current] == undefined){
            return null;
        } else {
-           return this.list[this.current];
+           return this.lista[this.current];
        }
    },  
     
@@ -39,7 +39,7 @@ var SantaModel = {
     * returns 0 if the given item does not fulfill the request
     */
    pack : function(item) {
-       if(item === this.list[this.current].answer){
+       if(item === this.lista[this.current].answer){
            return 1;
        } else {
            return 0;
@@ -54,7 +54,8 @@ var SantaModel = {
 
 var controller = {
     init: function(){
-        SantaModel.init();
+        var lista = requests;
+        SantaModel.init(lista);
         //if(SantaModel.current<SantaModel.list.length){
         view.render();
         view.clickAnsw();
